@@ -114,7 +114,7 @@ int setup_file()
 
 int choose_option()
 {
-    printf("Enter an option: 0 - New book\t1 - read book\t2 - view a book");
+    printf("Available options: 0 - New book\t1 - read book\t2 - view a book :\nEnter your option : ");
     int option = 0;
     scanf("%d", &option);
     getchar();
