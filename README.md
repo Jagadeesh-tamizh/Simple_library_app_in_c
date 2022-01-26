@@ -4,5 +4,5 @@
   Currently this app contains the following features,
     1. Create a new book.
     2. Reading a existing book.
-    3. View the existing book
+    3. View the existing book.
   Further features will be implemented later.
