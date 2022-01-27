@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+//defining options for creation, read, list
 #define OPTION_CREATE_BOOK 0
 #define OPTION_READ_BOOK 1
 #define OPTION_LIST_BOOKS 2
