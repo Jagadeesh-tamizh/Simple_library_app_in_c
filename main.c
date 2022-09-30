@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//defining options for creation, read, list
+// defining options for creation, read, list
 #define OPTION_CREATE_BOOK 0
 #define OPTION_READ_BOOK 1
 #define OPTION_LIST_BOOKS 2
@@ -17,13 +17,13 @@ struct book
 };
 
 FILE *f = NULL;
-struct book* ptr = NULL;
+struct book *ptr = NULL;
 
 int handle_create()
 {
-    struct  book b;
+    struct book b;
     memset(&b, 0, sizeof(b));
-    
+
     printf("Enter the books name: \n");
     fgets(b.title, sizeof(b.title), stdin);
     printf("Book name: %s\n", b.title);
@@ -34,30 +34,29 @@ int handle_create()
 
     printf("Has the book sold: Y/N?\n");
     char c = 0;
-    scanf("%c",&c);
-    if(c == 'Y' || c == 'y')
+    scanf("%c", &c);
+    if (c == 'Y' || c == 'y')
     {
         b.flags |= BOOK_FLAG_SOLD;
     }
     fseek(f, 0, SEEK_END);
-    fwrite(&b, sizeof(b), 1,f);
+    fwrite(&b, sizeof(b), 1, f);
 }
 
 int how_many_books()
 {
-    fseek(f,0,SEEK_END);
+    fseek(f, 0, SEEK_END);
     unsigned long total_size = ftell(f);
-    fseek(f,0, SEEK_SET);
+    fseek(f, 0, SEEK_SET);
 
     return total_size / sizeof(struct book);
-
 }
 
-void view_book(struct book* book)
+void view_book(struct book *book)
 {
     printf("Title : %s\n", book->title);
     printf("Description : %s\n", book->description);
-    if(book->flags & BOOK_FLAG_SOLD)
+    if (book->flags & BOOK_FLAG_SOLD)
     {
         printf("This book was sold sorry\n");
     }
@@ -67,27 +66,26 @@ void view_book(struct book* book)
     }
 }
 
-
 int handle_list()
 {
     struct book b;
     fseek(f, 0, SEEK_SET);
     int index = 0;
     int total_books = how_many_books();
-    ptr = (struct book*)malloc(sizeof(struct book) * total_books);
-    
-    while(fread(&b, sizeof(b), 1, f) ==  1)
+    ptr = (struct book *)malloc(sizeof(struct book) * total_books);
+
+    while (fread(&b, sizeof(b), 1, f) == 1)
     {
         memcpy(&ptr[index], &b, sizeof(b));
-        printf("%d - %s\n",index,b.title);
+        printf("%d - %s\n", index, b.title);
         index++;
     }
 
     int option = 0;
     printf("Choose a book: ");
-    scanf("%d",&option);
+    scanf("%d", &option);
 
-    if(option < 0 || option >=total_books)
+    if (option < 0 || option >= total_books)
     {
         printf("Invalid bok\n");
         return -1;
@@ -96,9 +94,6 @@ int handle_list()
     view_book(&ptr[option]);
     free(ptr);
     return 0;
-
-    
-    
 }
 int setup_file()
 {
@@ -122,28 +117,29 @@ int choose_option()
     int res = 0;
     switch (option)
     {
-        case OPTION_CREATE_BOOK:
-            res = handle_create();
-            if(res < 0)
-            {
-                return res;
-            }
-            break;
-        case OPTION_READ_BOOK:
-            printf("You selected to read a book");
-            break;
+    case OPTION_CREATE_BOOK:
+        res = handle_create();
+        if (res < 0)
+        {
+            return res;
+        }
+        break;
+    case OPTION_READ_BOOK:
+        printf("You selected to read a book");
+        break;
 
-        case OPTION_LIST_BOOKS:
-            handle_list();
-            break;
-        
-        default:
-            printf("Invalid option chosen");
-            return -1;
+    case OPTION_LIST_BOOKS:
+        handle_list();
+        break;
+
+    default:
+        printf("Invalid option chosen");
+        return -1;
     }
     return 0;
 }
 
+// Driver code
 int main(int argc, char **argv)
 {
     if (setup_file() < 0)
